@@ -1,41 +1,57 @@
 ﻿<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs">
-    <Package Id="*" Name="SteamShortcutCreator" Version="1.0.0.0" Manufacturer="TurtyWurty" UpgradeCode="a5ff8003-3889-4bc7-a0b2-bd574dae4618" Language="1033">
-        <Media Id="1" Cabinet="media1.cab" EmbedCab="yes" />
+    <Package Name="SteamShortcutCreator"
+             Version="1.0.0.0"
+             Manufacturer="TurtyWurty"
+             UpgradeCode="a5ff8003-3889-4bc7-a0b2-bd574dae4618"
+             Language="1033">
+
+        <!-- Compression & CAB -->
         <MediaTemplate EmbedCab="yes" />
-        <StandardDirectory Id="DISTDIR" Path="dist" />
 
-        <Directory Id="TARGETDIR" Name="SourceDir">
-            <Directory Id="ProgramFilesFolder">
-                <Directory Id="INSTALLFOLDER" Name="SteamShortcutCreator">
-                    <Component Id="MainExecutable" Guid="65c2ba87-811a-4182-822a-a9c2e16d0e65">
-                        <File Id="SteamShortcutCreator" Source="bin\Release\net9.0-windows\win-x64\SteamStartMenu.exe" KeyPath="yes">
-                            <Shortcut Id="DesktopShortcut" Directory="DesktopFolder"
-                                      Name="SteamShortcutCreator" WorkingDirectory="INSTALLFOLDER"
-                                      Icon="AppIcon.ico" Advertise="no"/>
-                            <Shortcut Id="StartMenuShortcut" Directory="ProgramMenuFolder"
-                                      Name="SteamShortcutCreator" WorkingDirectory="INSTALLFOLDER"
-                                      Icon="AppIcon.ico" Advertise="no"/>
-                        </File>
-                        <RemoveFolder Id="INSTALLFOLDER" On="uninstall"/>
-                        <RemoveFolder Id="SteamShortcutCreatorProgramMenu" On="uninstall"/>
-                        <RegistryValue Root="HKLM" Key="Software\SteamShortcutCreator"
-                                       Name="Installed" Type="integer" Value="1"/>
-                        <RemoveFile Id="RemoveProgramMenu" Name="*" On="uninstall" Directory="SteamShortcutCreatorProgramMenu"/>
-                    </Component>
-                </Directory>
+        <!-- Installation target -->
+        <StandardDirectory Id="ProgramFilesFolder">
+            <Directory Id="INSTALLFOLDER" Name="SteamShortcutCreator">
+                <Component Id="MainExecutable" Guid="65c2ba87-811a-4182-822a-a9c2e16d0e65">
+                    <File Id="SteamShortcutCreator"
+                          Source="$(var.PublishDir)\SteamStartMenu.exe"
+                          KeyPath="yes">
+                        <Shortcut Id="DesktopShortcut"
+                                  Directory="DesktopFolder"
+                                  Name="SteamShortcutCreator"
+                                  WorkingDirectory="INSTALLFOLDER"
+                                  Icon="AppIcon.ico"
+                                  Advertise="no"/>
+                        <Shortcut Id="StartMenuShortcut"
+                                  Directory="ProgramMenuFolder"
+                                  Name="SteamShortcutCreator"
+                                  WorkingDirectory="INSTALLFOLDER"
+                                  Icon="AppIcon.ico"
+                                  Advertise="no"/>
+                    </File>
+
+                    <RemoveFolder Id="INSTALLFOLDER" On="uninstall"/>
+                    <RegistryValue Root="HKLM"
+                                   Key="Software\\SteamShortcutCreator"
+                                   Name="Installed"
+                                   Type="integer"
+                                   Value="1"/>
+                </Component>
             </Directory>
+        </StandardDirectory>
 
-            <Directory Id="DesktopFolder" Name="Desktop"/>
-            <Directory Id="ProgramMenuFolder">
-                <Directory Id="SteamShortcutCreatorProgramMenu" Name="SteamShortcutCreator"/>
-            </Directory>
-        </Directory>
+        <!-- Built-in standard directories -->
+        <StandardDirectory Id="DesktopFolder" />
+        <StandardDirectory Id="ProgramMenuFolder">
+            <Directory Id="SteamShortcutCreatorProgramMenu" Name="SteamShortcutCreator"/>
+        </StandardDirectory>
 
+        <!-- Feature -->
         <Feature Id="MainFeature" Title="SteamShortcutCreator" Level="1">
             <ComponentRef Id="MainExecutable" />
         </Feature>
 
-        <Icon Id="AppIcon.ico" SourceFile="AppIcon.ico"/>
-        <Property Id="ARPPRODUCTICON" Value="AppIcon.ico"/>
+        <!-- Icon for ARP (Add/Remove Programs) -->
+        <Icon Id="AppIcon.ico" SourceFile="Assets/AppIcon.ico"/>
+        <Property Id="ARPPRODUCTICON" Value="Assets/AppIcon.ico"/>
     </Package>
 </Wix>

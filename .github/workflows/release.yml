@@ -64,7 +64,7 @@ jobs:
         
       # --- Build MSI using WiX ---
       - name: Build MSI
-        run: wix build Installers/SteamShortcutCreator.wxs --output dist/SteamShortcutCreator-${{ env.VERSION }}.msi --define PublishDir=dist/publish
+        run: wix build Installers/SteamShortcutCreator.wxs -o dist/SteamShortcutCreator-${{ env.VERSION }}.msi -d PublishDir=dist/publish
       
       # --- Install Inno Setup ---
       - name: Install Inno Setup
