@@ -20,8 +20,9 @@ jobs:
       # --- Extract version from tag ---
       - name: Get Version
         id: get_version
-        run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $env:GITHUB_ENV
-
+        shell: pwsh
+        run: echo "VERSION=$(${env:GITHUB_REF} -replace '^refs/tags/v','')" >> $env:GITHUB_ENV
+      
       # --- Setup .NET ---
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
