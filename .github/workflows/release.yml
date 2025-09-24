@@ -75,10 +75,9 @@ jobs:
           (Get-Content Installers/setup.iss) `
             -replace 'AppVersion=.*', "AppVersion=${{ env.VERSION }}" `
             -replace 'OutputBaseFilename=.*', "OutputBaseFilename=SteamShortcutCreatorInstaller-${{ env.VERSION }}" `
-            -replace '\.\.\\dist\\publish', "dist\\publish" `
             | Set-Content Installers/setup.tmp.iss
           iscc.exe Installers/setup.tmp.iss /Odist
-
+      
       # --- Build EXE using Inno Setup ---
       - name: Build Inno Setup installer
         run: |
