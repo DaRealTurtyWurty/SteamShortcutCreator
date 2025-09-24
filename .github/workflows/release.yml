@@ -37,24 +37,35 @@ jobs:
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: "9.0.x"
+          
+      # --- Cache the NuGet packages to speed up builds ---
+      - name: Cache NuGet packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.nuget/packages
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}
+          restore-keys: |
+            ${{ runner.os }}-nuget-
+
 
       # --- Restore & build ---
       - name: Restore
         run: dotnet restore SteamStartMenu.sln
+        
+      - name: Prepare dist folder
+        run: mkdir dist
 
       # --- Publish with dotnet ---
       - name: Publish
         run: dotnet publish SteamStartMenu.csproj -c Release -r win-x64 --self-contained true -o dist/publish /p:Version=${{ env.VERSION }}
-
+        
+      - name: Install WiX v4
+        run: dotnet tool install --global wix --version 4.*
+        
       # --- Build MSI using WiX ---
       - name: Build MSI
-        run: |
-          # Replace version in WiX file
-          (Get-Content Installers/SteamShortcutCreator.wxs) -replace 'Version=".*?"', 'Version="${{ env.VERSION }}.0"' | Set-Content Installers/SteamShortcutCreator.tmp.wxs
-
-          candle.exe Installers/SteamShortcutCreator.tmp.wxs -out dist/SteamShortcutCreator.wixobj
-          light.exe dist/SteamShortcutCreator.wixobj -o dist/SteamShortcutCreator-${{ env.VERSION }}.msi -b dist/publish
-
+        run: wix build Installers/SteamShortcutCreator.wxs -o dist/SteamShortcutCreator-${{ env.VERSION }}.msi -dPublishDir=dist/publish
+      
       # --- Install Inno Setup ---
       - name: Install Inno Setup
         run: choco install innosetup -y
