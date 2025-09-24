@@ -41,8 +41,7 @@ public partial class MainWindow
         var appInfo = SteamUtils.ReadAppInfo(steamPath);
         var filteredApps = appInfo.Apps
             .Where(appInfoApp => appInfoApp.Data["common"] is not null)
-            .Where(appInfoApp =>
-                appInfoApp.Data["common"]["type"].ToString(CultureInfo.CurrentCulture) == "Game")
+            .Where(appInfoApp => IsValidType(appInfoApp.Data["common"]["type"].ToString(CultureInfo.CurrentCulture)))
             .Where(appInfoApp => appInfoApp.Data["common"]["clienticon"] is not null);
         
         foreach (var appId in SteamUtils.GetSteamLibraries(steamPath).SelectMany(lib => lib.Apps))
@@ -57,6 +56,12 @@ public partial class MainWindow
         
         AppListBox.ItemsSource = apps;
         ShowStatus($"Loaded {apps.Count} games.");
+    }
+
+    private static bool IsValidType(string type)
+    {
+        Console.WriteLine(type);
+        return type is "Game" or "Application" or "Tool" or "Demo" or "Beta";
     }
     
     [SuppressMessage("Performance", "CA1822:Mark members as static")]
