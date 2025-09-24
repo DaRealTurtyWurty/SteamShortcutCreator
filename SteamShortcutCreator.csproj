@@ -5,6 +5,8 @@
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
         <UseWPF>true</UseWPF>
+        <AssemblyName>SteamShortcutCreator</AssemblyName>
+        <RootNamespace>SteamShortcutCreator</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>
