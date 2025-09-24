@@ -34,7 +34,7 @@ jobs:
 
       # --- Publish with dotnet ---
       - name: Publish
-        run: dotnet publish SteamStartMenu/SteamStartMenu.csproj -c Release -r win-x64 --self-contained true -o dist/publish /p:Version=${{ env.VERSION }}
+        run: dotnet publish SteamStartMenu.csproj -c Release -r win-x64 --self-contained true -o dist/publish /p:Version=${{ env.VERSION }}
 
       # --- Install WiX ---
       - name: Install WiX
@@ -44,9 +44,9 @@ jobs:
       - name: Build MSI
         run: |
           # Replace version in WiX file
-          (Get-Content SteamShortcutCreator.wxs) -replace 'Version=".*?"', 'Version="${{ env.VERSION }}.0"' | Set-Content SteamShortcutCreator.tmp.wxs
+          (Get-Content Installers/SteamShortcutCreator.wxs) -replace 'Version=".*?"', 'Version="${{ env.VERSION }}.0"' | Set-Content Installers/SteamShortcutCreator.tmp.wxs
 
-          candle.exe SteamShortcutCreator.tmp.wxs -out dist/SteamShortcutCreator.wixobj
+          candle.exe Installers/SteamShortcutCreator.tmp.wxs -out dist/SteamShortcutCreator.wixobj
           light.exe dist/SteamShortcutCreator.wixobj -o dist/SteamShortcutCreator-${{ env.VERSION }}.msi -b dist/publish
 
       # --- Install Inno Setup ---
@@ -57,12 +57,12 @@ jobs:
       - name: Build Inno Setup installer
         run: |
           # Inject version & output name dynamically
-          (Get-Content setup.iss) `
+          (Get-Content Installers/setup.iss) `
             -replace 'AppVersion=.*', "AppVersion=${{ env.VERSION }}" `
             -replace 'OutputBaseFilename=.*', "OutputBaseFilename=SteamShortcutCreatorInstaller-${{ env.VERSION }}" `
-            | Set-Content setup.tmp.iss
+            | Set-Content Installers/setup.tmp.iss
 
-          iscc.exe setup.tmp.iss /Odist
+          iscc.exe Installers/setup.tmp.iss /Odist
 
       # --- Upload artifacts ---
       - name: Upload Artifacts
