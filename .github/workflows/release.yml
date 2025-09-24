@@ -90,11 +90,13 @@ jobs:
           iscc.exe Installers/setup.tmp.iss /Odist
 
       # --- Upload artifacts ---
-      - name: Upload Artifacts
+      - name: Upload installers
         uses: actions/upload-artifact@v4
         with:
           name: installers
-          path: dist/*.{msi,exe}
+          path: |
+            dist/*.msi
+            dist/*.exe
 
   release:
     runs-on: windows-latest
