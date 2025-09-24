@@ -101,6 +101,8 @@ jobs:
   release:
     runs-on: windows-latest
     needs: build
+    permissions:
+      contents: write
 
     steps:
       - name: Download installers
