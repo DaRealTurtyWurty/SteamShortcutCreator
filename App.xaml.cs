@@ -1,8 +1,8 @@
 ﻿using System.Windows;
-using SteamStartMenu.Services;
-using SteamStartMenu.Views;
+using SteamShortcutCreator.Services;
+using SteamShortcutCreator.Views;
 
-namespace SteamStartMenu;
+namespace SteamShortcutCreator;
 
 public partial class App : Application
 {

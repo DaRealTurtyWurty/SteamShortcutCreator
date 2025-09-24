@@ -1,4 +1,4 @@
-﻿<ui:FluentWindow x:Class="SteamStartMenu.Views.MainWindow"
+﻿<ui:FluentWindow x:Class="SteamShortcutCreator.Views.MainWindow"
                  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -14,7 +14,7 @@
     <DockPanel>
         <!-- Win11-style Title Bar -->
         <ui:TitleBar Title="Steam Shortcut Creator"
-                     Icon="Game20"
+                     Icon="Assets/AppIcon.ico"
                      DockPanel.Dock="Top" />
 
         <Grid Margin="16">

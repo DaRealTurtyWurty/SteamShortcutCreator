@@ -9,7 +9,7 @@ Compression=lzma
 SolidCompression=yes
 
 [Files]
-Source: "..\dist\publish\SteamStartMenu.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\dist\publish\SteamShortcutCreator.exe"; DestDir: "{app}"; Flags: ignoreversion
 Source: "..\dist\publish\*"; DestDir: "{app}"; Flags: recursesubdirs createallsubdirs
 
 [Icons]

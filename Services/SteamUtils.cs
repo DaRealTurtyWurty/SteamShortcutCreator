@@ -1,13 +1,13 @@
 ﻿using System.IO;
 using Gameloop.Vdf;
 using Microsoft.Win32;
-using SteamStartMenu.Models;
+using SteamShortcutCreator.Models;
 
-namespace SteamStartMenu.Services;
+namespace SteamShortcutCreator.Services;
 
 public static class SteamUtils
 {
-    private const string RegistryPath = @"HKEY_CURRENT_USER\Software\SteamStartMenu";
+    private const string RegistryPath = @"HKEY_CURRENT_USER\Software\SteamShortcutCreator";
     private const string SteamPathKey = "SteamPath";
 
     public static string? GetSteamPath()

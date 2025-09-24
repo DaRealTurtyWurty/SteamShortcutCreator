@@ -50,14 +50,14 @@ jobs:
 
       # --- Restore & build ---
       - name: Restore
-        run: dotnet restore SteamStartMenu.sln
+        run: dotnet restore SteamShortcutCreator.sln
         
       - name: Prepare dist folder
         run: mkdir dist
 
       # --- Publish with dotnet ---
       - name: Publish
-        run: dotnet publish SteamStartMenu.csproj -c Release -r win-x64 --self-contained true -o dist/publish /p:Version=${{ env.VERSION }}
+        run: dotnet publish SteamShortcutCreator.csproj -c Release -r win-x64 --self-contained true -o dist/publish /p:Version=${{ env.VERSION }}
         
       - name: Install WiX v4
         run: dotnet tool install --global wix --version 4.*

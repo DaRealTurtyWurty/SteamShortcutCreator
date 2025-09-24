@@ -2,7 +2,7 @@
 using System.Net.Http;
 using System.Text.Json;
 
-namespace SteamStartMenu.Services;
+namespace SteamShortcutCreator.Services;
 
 public static class SteamApi
 {

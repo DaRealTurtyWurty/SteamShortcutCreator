@@ -4,7 +4,7 @@ using System.IO;
 using System.Text;
 using ValveKeyValue;
 
-namespace SteamStartMenu.Services;
+namespace SteamShortcutCreator.Services;
 
 public class AppInfo
 {

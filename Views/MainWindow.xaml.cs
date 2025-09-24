@@ -4,10 +4,10 @@ using System.IO;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Threading;
-using SteamStartMenu.Models;
-using SteamStartMenu.Services;
+using SteamShortcutCreator.Models;
+using SteamShortcutCreator.Services;
 
-namespace SteamStartMenu.Views;
+namespace SteamShortcutCreator.Views;
 
 public partial class MainWindow
 {

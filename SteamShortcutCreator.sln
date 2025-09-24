@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SteamStartMenu", "SteamStartMenu.csproj", "{D0C90ABC-0275-4444-8184-6D5437547D0A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SteamShortcutCreator", "SteamShortcutCreator.csproj", "{D0C90ABC-0275-4444-8184-6D5437547D0A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

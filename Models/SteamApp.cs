@@ -1,4 +1,4 @@
-﻿namespace SteamStartMenu.Models;
+﻿namespace SteamShortcutCreator.Models;
 
 public readonly struct SteamApp(long appId, string name, string icon)
 {

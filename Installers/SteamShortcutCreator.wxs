@@ -13,7 +13,7 @@
             <Directory Id="INSTALLFOLDER" Name="SteamShortcutCreator">
                 <Component Id="MainExecutable" Guid="65c2ba87-811a-4182-822a-a9c2e16d0e65">
                     <File Id="SteamShortcutCreator"
-                          Source="$(var.PublishDir)\SteamStartMenu.exe"
+                          Source="$(var.PublishDir)\SteamShortcutCreator.exe"
                           KeyPath="yes">
                         <Shortcut Id="DesktopShortcut"
                                   Directory="DesktopFolder"

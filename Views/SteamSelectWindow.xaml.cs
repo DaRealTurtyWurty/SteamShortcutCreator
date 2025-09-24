@@ -1,9 +1,9 @@
 ﻿using System.Windows;
 using System.Windows.Media;
 using Microsoft.Win32;
-using SteamStartMenu.Services;
+using SteamShortcutCreator.Services;
 
-namespace SteamStartMenu.Views;
+namespace SteamShortcutCreator.Views;
 
 public partial class SteamSelectWindow
 {

@@ -1,6 +1,6 @@
 ﻿# SteamShortcutCreator
 
-[![Build & Release](https://github.com/DaRealTurtyWurty/SteamStartMenu/actions/workflows/release.yml/badge.svg)](https://github.com/DaRealTurtyWurty/SteamStartMenu/actions)
+[![Build & Release](https://github.com/DaRealTurtyWurty/SteamShortcutCreator/actions/workflows/release.yml/badge.svg)](https://github.com/DaRealTurtyWurty/SteamShortcutCreator/actions)
 
 Create and manage Steam shortcuts with a clean, modern Windows 11–style interface.
 
@@ -18,7 +18,7 @@ Create and manage Steam shortcuts with a clean, modern Windows 11–style interf
 
 ## 📥 Installation
 
-Download the latest release from the [Releases page](https://github.com/DaRealTurtyWurty/SteamStartMenu/releases).
+Download the latest release from the [Releases page](https://github.com/DaRealTurtyWurty/SteamShortcutCreator/releases).
 
 * **Windows Installer (.msi)** → integrates with Windows, supports enterprise installs
 * **Setup Wizard (.exe)** → friendly installer with wizard UI
@@ -47,8 +47,8 @@ Requirements:
 Clone and build:
 
 ```bash
-git clone https://github.com/DaRealTurtyWurty/SteamStartMenu.git
-cd SteamStartMenu
+git clone https://github.com/DaRealTurtyWurty/SteamShortcutCreator.git
+cd SteamShortcutCreator
 dotnet build
 ```
 
@@ -69,7 +69,7 @@ light.exe dist/SteamShortcutCreator.wixobj -o dist/SteamShortcutCreator.msi -b d
 iscc.exe setup.iss /Odist
 ```
 
-Or simply let GitHub Actions build them for you — check the [Releases](https://github.com/DaRealTurtyWurty/SteamStartMenu/releases).
+Or simply let GitHub Actions build them for you — check the [Releases](https://github.com/DaRealTurtyWurty/SteamShortcutCreator/releases).
 
 ---
 
