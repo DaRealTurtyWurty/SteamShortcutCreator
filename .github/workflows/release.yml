@@ -21,7 +21,16 @@ jobs:
       - name: Get Version
         id: get_version
         shell: pwsh
-        run: echo "VERSION=$(${env:GITHUB_REF} -replace '^refs/tags/v','')" >> $env:GITHUB_ENV
+        run: |
+          if ("${{ github.ref }}" -like "refs/tags/v*") {
+            # Release tags: strip 'refs/tags/v'
+            $version = "${{ github.ref }}" -replace '^refs/tags/v',''
+          } else {
+            # Branch builds: use a dev version
+            $branch = "${{ github.ref_name }}" -replace '[^0-9A-Za-z\-]','-'
+            $version = "0.0.0-dev-$branch"
+          }
+          echo "VERSION=$version" >> $env:GITHUB_ENV
       
       # --- Setup .NET ---
       - name: Setup .NET
@@ -36,7 +45,7 @@ jobs:
       # --- Publish with dotnet ---
       - name: Publish
         run: dotnet publish SteamStartMenu.csproj -c Release -r win-x64 --self-contained true -o dist/publish /p:Version=${{ env.VERSION }}
-
+      
       # --- Install WiX ---
       - name: Install WiX
         run: choco install wixtoolset --version=3.11.2 -y
