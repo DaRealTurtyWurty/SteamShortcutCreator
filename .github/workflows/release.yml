@@ -1,0 +1,92 @@
+﻿name: Build & Release Installers
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - "v1.0.0"
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      # --- Checkout code ---
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      # --- Extract version from tag ---
+      - name: Get Version
+        id: get_version
+        run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $env:GITHUB_ENV
+
+      # --- Setup .NET ---
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "9.0.x"
+
+      # --- Restore & build ---
+      - name: Restore
+        run: dotnet restore SteamStartMenu.sln
+
+      - name: Publish
+        run: dotnet publish SteamStartMenu.sln -c Release -r win-x64 --self-contained true -o dist/publish /p:Version=${{ env.VERSION }}
+
+      # --- Install WiX ---
+      - name: Install WiX
+        run: choco install wixtoolset --version=3.11.2 -y
+
+      # --- Build MSI using WiX ---
+      - name: Build MSI
+        run: |
+          # Replace version in WiX file
+          (Get-Content SteamShortcutCreator.wxs) -replace 'Version=".*?"', 'Version="${{ env.VERSION }}.0"' | Set-Content SteamShortcutCreator.tmp.wxs
+
+          candle.exe SteamShortcutCreator.tmp.wxs -out dist/SteamShortcutCreator.wixobj
+          light.exe dist/SteamShortcutCreator.wixobj -o dist/SteamShortcutCreator-${{ env.VERSION }}.msi -b dist/publish
+
+      # --- Install Inno Setup ---
+      - name: Install Inno Setup
+        run: choco install innosetup -y
+
+      # --- Build EXE using Inno Setup ---
+      - name: Build Inno Setup installer
+        run: |
+          # Inject version & output name dynamically
+          (Get-Content setup.iss) `
+            -replace 'AppVersion=.*', "AppVersion=${{ env.VERSION }}" `
+            -replace 'OutputBaseFilename=.*', "OutputBaseFilename=SteamShortcutCreatorInstaller-${{ env.VERSION }}" `
+            | Set-Content setup.tmp.iss
+
+          iscc.exe setup.tmp.iss /Odist
+
+      # --- Upload artifacts ---
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: installers
+          path: dist/*.{msi,exe}
+
+  release:
+    runs-on: windows-latest
+    needs: build
+
+    steps:
+      - name: Download installers
+        uses: actions/download-artifact@v4
+        with:
+          name: installers
+          path: dist
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.ref_name }}
+          name: "Release ${{ github.ref_name }}"
+          files: dist/*.{msi,exe}
+          generate_release_notes: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

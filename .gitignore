@@ -1,0 +1,51 @@
+# ---- Build outputs ----
+bin/
+obj/
+out/
+[Bb]uild/
+[Ll]og/
+TestResults/
+
+# ---- Visual Studio / JetBrains ----
+.vs/
+.idea/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# ---- Rider / ReSharper ----
+_ReSharper*/
+*.DotSettings.user
+
+# ---- NuGet ----
+*.nupkg
+*.snupkg
+packages/
+*.nuget.props
+*.nuget.targets
+
+# ---- VSCode ----
+.vscode/
+
+# ---- Cache & temp ----
+*.cache
+*.dbmdl
+*.bak
+*.tmp
+*.log
+
+# ---- Publish artifacts ----
+*.publishsettings
+publish/
+
+# ---- Other ----
+*.swp
+*.DS_Store
+Thumbs.db
+
+# WiX installer build artifacts
+*.wixobj
+*.wixpdb
+*.msi
+*.exe
