@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
   push:
     tags:
-      - "v1.0.0"
+      - "v*"
 
 jobs:
   build:
@@ -32,8 +32,9 @@ jobs:
       - name: Restore
         run: dotnet restore SteamStartMenu.sln
 
+      # --- Publish with dotnet ---
       - name: Publish
-        run: dotnet publish SteamStartMenu.sln -c Release -r win-x64 --self-contained true -o dist/publish /p:Version=${{ env.VERSION }}
+        run: dotnet publish SteamStartMenu/SteamStartMenu.csproj -c Release -r win-x64 --self-contained true -o dist/publish /p:Version=${{ env.VERSION }}
 
       # --- Install WiX ---
       - name: Install WiX
