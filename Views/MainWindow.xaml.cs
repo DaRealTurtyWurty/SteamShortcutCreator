@@ -1,9 +1,11 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.IO;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Threading;
+using System.Windows.Data;
 using SteamShortcutCreator.Models;
 using SteamShortcutCreator.Services;
 
@@ -12,6 +14,7 @@ namespace SteamShortcutCreator.Views;
 public partial class MainWindow
 {
     private SteamApp? _selectedApp;
+    private ICollectionView? _appsView;
     private readonly DispatcherTimer _statusTimer;
 
     public MainWindow()
@@ -55,12 +58,13 @@ public partial class MainWindow
         }
         
         AppListBox.ItemsSource = apps;
+        _appsView = CollectionViewSource.GetDefaultView(AppListBox.ItemsSource);
+        ApplySearchFilter(SearchBox.Text);
         ShowStatus($"Loaded {apps.Count} games.");
     }
 
     private static bool IsValidType(string type)
     {
-        Console.WriteLine(type);
         return type is "Game" or "Application" or "Tool" or "Demo" or "Beta";
     }
     
@@ -114,6 +118,50 @@ public partial class MainWindow
         if (CreateShortcutButton.IsEnabled)
             ConfirmSelection_Click(sender, e);
     }
+
+    private void SearchBox_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
+    {
+        ApplySearchFilter(SearchBox.Text);
+    }
+
+    private void ApplySearchFilter(string? query)
+    {
+        if (_appsView is null)
+        {
+            return;
+        }
+
+        var trimmedQuery = query?.Trim();
+
+        if (string.IsNullOrEmpty(trimmedQuery))
+        {
+            _appsView.Filter = null;
+        }
+        else
+        {
+            _appsView.Filter = item => item is SteamApp app &&
+                (app.Name.Contains(trimmedQuery, StringComparison.CurrentCultureIgnoreCase) ||
+                 app.AppId.ToString(CultureInfo.CurrentCulture).Contains(trimmedQuery, StringComparison.CurrentCultureIgnoreCase));
+        }
+
+        _appsView.Refresh();
+
+        if (_selectedApp is { } selected && !_appsView.Cast<object>().Any(item => item is SteamApp app && app.AppId == selected.AppId))
+        {
+            DeselectSelectedApp();
+        }
+
+        if (_appsView.IsEmpty)
+        {
+            ShowStatus("No games match your search.");
+        }
+        else if (StatusText.Text == "No games match your search.")
+        {
+            StatusText.Visibility = Visibility.Collapsed;
+            _statusTimer.Stop();
+        }
+    }
+
     private void MainWindow_PreviewKeyDown(object sender, KeyEventArgs e)
     {
         if (e.Key == Key.Enter && CreateShortcutButton.IsEnabled)

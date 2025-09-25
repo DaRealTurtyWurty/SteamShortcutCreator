@@ -19,93 +19,140 @@
 
         <Grid Margin="16">
             <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
 
-            <!-- LIST -->
-            <ui:Card Margin="0,0,0,12" Padding="8">
-                <ListBox x:Name="AppListBox"
-                         SelectionMode="Single"
-                         BorderThickness="0"
-                         Background="Transparent"
-                         MouseDoubleClick="AppListBox_MouseDoubleClick"
-                         SelectionChanged="AppListBox_SelectionChanged"
-                         ScrollViewer.CanContentScroll="True"
-                         VirtualizingStackPanel.IsVirtualizing="True">
-                    <ListBox.ItemContainerStyle>
-                        <Style TargetType="ListBoxItem">
-                            <Setter Property="Padding" Value="6" />
-                            <Setter Property="Margin" Value="0,2" />
-                            <Setter Property="Background" Value="Transparent" />
-                            <Setter Property="Template">
-                                <Setter.Value>
-                                    <ControlTemplate TargetType="ListBoxItem">
-                                        <Border x:Name="Bd" CornerRadius="8" Background="{TemplateBinding Background}">
-                                            <ContentPresenter />
-                                        </Border>
-                                        <ControlTemplate.Triggers>
-                                            <Trigger Property="IsMouseOver" Value="True">
-                                                <Setter TargetName="Bd" Property="Background"
-                                                        Value="{DynamicResource ControlFillColorSecondaryBrush}" />
-                                            </Trigger>
-                                            <Trigger Property="IsSelected" Value="True">
-                                                <Setter TargetName="Bd" Property="Background"
-                                                        Value="{DynamicResource ControlFillColorDefaultBrush}" />
-                                            </Trigger>
-                                        </ControlTemplate.Triggers>
-                                    </ControlTemplate>
-                                </Setter.Value>
-                            </Setter>
-                        </Style>
-                    </ListBox.ItemContainerStyle>
+            <!-- Search bar (fixed at top, not affected by centering) -->
+            <ui:TextBox x:Name="SearchBox"
+                        Grid.Row="0"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Top"
+                        PlaceholderText="Search games..."
+                        Margin="0,0,0,8"
+                        TextChanged="SearchBox_TextChanged" />
 
-                    <ListBox.ItemTemplate>
-                        <DataTemplate>
-                            <StackPanel Orientation="Horizontal">
-                                <Border Width="64" Height="64" CornerRadius="8"
-                                        Background="{DynamicResource ControlFillColorSecondaryBrush}"
-                                        Margin="0,0,12,0">
-                                    <Image Source="{Binding Icon}" Stretch="Uniform" />
-                                </Border>
-                                <StackPanel VerticalAlignment="Center">
-                                    <ui:TextBlock Text="{Binding Name}"
-                                                  FontWeight="SemiBold"
-                                                  FontSize="16" />
-                                    <ui:TextBlock Text="{Binding AppId}"
-                                                  FontSize="13"
-                                                  Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+            <!-- LIST AREA -->
+            <ui:Card Grid.Row="1" Margin="0,0,0,12" Padding="8"
+                     HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    
+                    <!-- List (centered items inside, fills available space) -->
+                    <ListBox x:Name="AppListBox"
+                             VerticalAlignment="Stretch"
+                             HorizontalAlignment="Stretch"
+                             SelectionMode="Single"
+                             BorderThickness="0"
+                             Background="Transparent"
+                             MouseDoubleClick="AppListBox_MouseDoubleClick"
+                             SelectionChanged="AppListBox_SelectionChanged"
+                             ScrollViewer.VerticalScrollBarVisibility="Auto"
+                             VirtualizingStackPanel.IsVirtualizing="True"
+                             VirtualizingStackPanel.VirtualizationMode="Recycling"
+                             Grid.Row="0">
+                        <ListBox.Style>
+                            <Style TargetType="ListBox" BasedOn="{StaticResource {x:Type ListBox}}">
+                                <Style.Triggers>
+                                    <Trigger Property="HasItems" Value="False">
+                                        <Setter Property="Visibility" Value="Collapsed" />
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ListBox.Style>
+
+                        <ListBox.ItemContainerStyle>
+                            <Style TargetType="ListBoxItem">
+                                <Setter Property="Padding" Value="6" /> 
+                                <Setter Property="Margin" Value="0,2" />
+                                <Setter Property="Background" Value="Transparent" />
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="ListBoxItem">
+                                            <Border x:Name="Bd" CornerRadius="8"
+                                                    Background="{TemplateBinding Background}">
+                                                <ContentPresenter />
+                                            </Border>
+                                            <ControlTemplate.Triggers>
+                                                <Trigger Property="IsMouseOver" Value="True">
+                                                    <Setter TargetName="Bd" Property="Background"
+                                                            Value="{DynamicResource ControlFillColorSecondaryBrush}" />
+                                                </Trigger>
+                                                <Trigger Property="IsSelected" Value="True">
+                                                    <Setter TargetName="Bd" Property="Background"
+                                                            Value="{DynamicResource ControlFillColorDefaultBrush}" />
+                                                </Trigger>
+                                            </ControlTemplate.Triggers>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </ListBox.ItemContainerStyle>
+
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <Border Width="64" Height="64" CornerRadius="8"
+                                            Background="{DynamicResource ControlFillColorSecondaryBrush}"
+                                            Margin="0,0,12,0">
+                                        <Image Source="{Binding Icon}" Stretch="Uniform" />
+                                    </Border>
+                                    <StackPanel VerticalAlignment="Center">
+                                        <ui:TextBlock Text="{Binding Name}" FontWeight="SemiBold" FontSize="16" />
+                                        <ui:TextBlock Text="{Binding AppId}" FontSize="13"
+                                                      Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                                    </StackPanel>
                                 </StackPanel>
-                            </StackPanel>
-                        </DataTemplate>
-                    </ListBox.ItemTemplate>
-                </ListBox>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+
+                    <ui:TextBlock Grid.Row="1"
+                                  Text="No results found."
+                                  FontSize="14"
+                                  Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                                  HorizontalAlignment="Center"
+                                  Margin="0,8,0,12"
+                                  Padding="8">
+                        <ui:TextBlock.Style>
+                            <Style TargetType="ui:TextBlock">
+                                <Setter Property="Visibility" Value="Collapsed" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding HasItems, ElementName=AppListBox}" Value="False">
+                                        <Setter Property="Visibility" Value="Visible" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ui:TextBlock.Style>
+                    </ui:TextBlock>
+                </Grid>
             </ui:Card>
 
             <!-- ACTIONS -->
-            <ui:Card Grid.Row="1" Padding="12">
-                <StackPanel Orientation="Vertical">
-                    <!-- Status line (auto-hides) -->
-                    <ui:TextBlock x:Name="StatusText"
-                                  Visibility="Collapsed"
-                                  Margin="0,0,0,8"
-                                  FontSize="13"
-                                  Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
-
-                    <!-- Selected game -->
-                    <ui:TextBlock x:Name="SelectedGameLabel"
-                                  FontSize="14"
-                                  Margin="0,0,0,8"
-                                  Text="Pick a game from the list." />
-
-                    <!-- Primary action -->
-                    <ui:Button x:Name="CreateShortcutButton"
-                               Content="Create Shortcut"
-                               IsEnabled="False"
-                               Appearance="Success"
-                               Click="ConfirmSelection_Click" />
-                </StackPanel>
-            </ui:Card>
+            <Grid Grid.Row="2" Margin="16">
+                <ui:Card Padding="12">
+                    <StackPanel Orientation="Vertical">
+                        <ui:TextBlock x:Name="StatusText"
+                                      Visibility="Collapsed"
+                                      Margin="0,0,0,8"
+                                      FontSize="13"
+                                      Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                        <ui:TextBlock x:Name="SelectedGameLabel"
+                                      FontSize="14"
+                                      Margin="0,0,0,8"
+                                      Text="Pick a game from the list." />
+                        <ui:Button x:Name="CreateShortcutButton"
+                                   Content="Create Shortcut"
+                                   IsEnabled="False"
+                                   Appearance="Success"
+                                   Click="ConfirmSelection_Click" />
+                    </StackPanel>
+                </ui:Card>
+            </Grid>
         </Grid>
     </DockPanel>
 </ui:FluentWindow>
